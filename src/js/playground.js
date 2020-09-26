@@ -1,4 +1,4 @@
-/* global transTime, attach, show */
+/* global transTime, attach, show, hide, _detach */
 /* eslint-disable no-unused-vars */
 
 // ========================
@@ -15,6 +15,7 @@ let $msgWrp = document.querySelector('#playground-body .message span');
 let grid = {};
 let snake = {};
 let food = {};
+let game = {};
 
 // ========================
 // grid
@@ -121,7 +122,7 @@ snake.grow = () => {
 
 snake.injure = () => {
     snake.life--;
-    $lifeBox.find('img:last-child').remove();
+    $lifeBox.removeChild($lifeBox.lastChild);
 };
 
 snake.draw = () => {
@@ -175,6 +176,112 @@ food.draw = () => {
 };
 
 // ========================
+// game
+
+game.score = 0;
+game.playing = false;
+game.stopped = false;
+
+game.subreset = () => {
+    game.playing = false;
+    game.stopped = false;
+
+    snake.subreset();
+    food.place();
+};
+
+game.reset = () => {
+    game.subreset();
+    game.score = 0;
+    snake.reset();
+};
+
+game.play = () => {
+    hide($msgWrp, _detach($msgBox));
+    game.playing = true;
+    game.animate();
+};
+
+game.pause = () => {
+    $msgWrp.innerHTML = 'Paused!';
+    attach($msgBox);
+    show($msgWrp);
+    game.playing = false;
+};
+
+game.stop = () => {
+    snake.injure();
+    game.playing = false;
+    game.stopped = true;
+
+    if (snake.life) {
+        $msgWrp.innerHTML = 'Crashed!';
+        attach($msgBox);
+        show($msgWrp);
+
+        setTimeout(() => {
+            $msgWrp.innerHTML = "Press 'space' to start!";
+            game.subreset();
+            game.draw();
+        }, 2000);
+    } else {
+        $msgWrp.innerHTML = 'Game Over! Score: ' + game.score;
+        attach($msgBox);
+        show($msgWrp);
+        game.stopped = true;
+
+        setTimeout(() => {
+            $msgWrp.innerHTML = "Press 'space' to start!";
+            game.reset();
+            game.draw();
+        }, 2000);
+    }
+};
+
+game.updateScore = () => {
+    game.score++;
+    $scoreBox.innerHTML = game.score;
+};
+
+game.feedSnake = () => {
+    game.updateScore();
+    snake.grow();
+    food.place();
+};
+
+game.draw = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    snake.draw();
+    food.draw();
+};
+
+game.animate = () => {
+    if (!game.playing) {
+        return;
+    }
+
+    if (!snake.move()) {
+        game.stop();
+        return;
+    }
+
+    let snakeHead = snake.head();
+
+    if (snakeHead.x === food.pos.x && snakeHead.y === food.pos.y) {
+        game.feedSnake();
+
+        if (snake.speed < snake.maxSpeed) {
+            snake.speed =
+                parseInt(snake.energy / snake.boostingEnergy) + snake.minSpeed;
+        }
+    }
+
+    game.draw();
+
+    setTimeout(game.animate, 1000 / snake.speed);
+};
+
+// ========================
 // setup
 
 let initGround = () => {
@@ -194,7 +301,11 @@ let initGround = () => {
     };
 
     document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowUp') {
+        if (game.stopped) {
+            return;
+        } else if (e.key === ' ') {
+            game.playing ? game.pause() : game.play();
+        } else if (e.key === 'ArrowUp') {
             snake.moveUp();
         } else if (e.key === 'ArrowDown') {
             snake.moveDown();
@@ -206,6 +317,7 @@ let initGround = () => {
     });
 
     food.place();
+    game.draw();
 
     setTimeout(() => {
         attach($msgBox);
