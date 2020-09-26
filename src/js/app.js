@@ -1,4 +1,4 @@
-/* global transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show, _hide */
+/* global transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show, _hide, initGround */
 
 const $pl = document.querySelector('#preloader');
 const $plBrand = document.querySelector('#preloader .brand-cont');
@@ -49,4 +49,7 @@ window.addEventListener('load', () => {
     )();
 });
 
-$playBtn.addEventListener('click', _cb(hideAppIntro, showPlayground));
+$playBtn.addEventListener(
+    'click',
+    _cb(hideAppIntro, showPlayground, initGround)
+);

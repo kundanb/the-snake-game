@@ -40,7 +40,27 @@
             </div>
 
             <div id="playground-det" class="pos_a olap det det_d">
-                <div id="playground" class="olap stretch_rev_hid hid x x_col pad_b"></div>
+                <div id="playground" class="olap stretch_rev_hid hid x x_col pad_b">
+                    <div id="playground-header" class="pad_b x x_jc_sb x_ai_c">
+                        <div class="score x x_ai_c">
+                            <img src="./img/apple.svg" alt="apple" />
+                            <span>0</span>
+                        </div>
+
+                        <div class="life x"></div>
+                    </div>
+
+                    <div id="playground-body" class="pad_b">
+                        <div class="body-cont olap">
+                            <canvas id="canvas" class="pos_a olap"></canvas>
+                            <div class="message det det_d">
+                                <span class="stretch_rev_hid hid">
+                                    Press 'space' to start!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -74,6 +94,7 @@
         </div>
     </div>
 
+    <script src="./js/playground.js"></script>
     <script src="./js/app.js"></script>
 </body>
 </html>
