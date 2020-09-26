@@ -14,6 +14,7 @@ let $msgWrp = document.querySelector('#playground-body .message span');
 
 let grid = {};
 let snake = {};
+let food = {};
 
 // ========================
 // grid
@@ -144,6 +145,36 @@ snake.draw = () => {
 };
 
 // ========================
+// food
+
+food.pos = { x: null, y: null };
+
+food.image = new Image();
+food.image.src = './img/apple.svg';
+
+food.place = () => {
+    do {
+        food.pos = {
+            x: Math.round(Math.random() * grid.maxCells.x),
+            y: Math.round(Math.random() * grid.maxCells.y),
+        };
+    } while (snake.inArray(food.pos));
+};
+
+food.draw = () => {
+    context.save();
+
+    let x = food.pos.x * grid.cellSize + grid.margin.x;
+    let y = food.pos.y * grid.cellSize + grid.margin.y;
+    let size = grid.cellSize;
+
+    context.beginPath();
+    context.drawImage(food.image, x, y, size, size);
+
+    context.restore();
+};
+
+// ========================
 // setup
 
 let initGround = () => {
@@ -173,6 +204,8 @@ let initGround = () => {
             snake.moveRight();
         }
     });
+
+    food.place();
 
     setTimeout(() => {
         attach($msgBox);
