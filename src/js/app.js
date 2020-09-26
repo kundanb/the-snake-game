@@ -1,4 +1,5 @@
-/* global transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show, _hide, initGround */
+// eslint-disable-next-line no-unused-vars
+/* global isWindowLoaded, transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show, _hide, initGround */
 
 const $pl = document.querySelector('#preloader');
 const $plBrand = document.querySelector('#preloader .brand-cont');
@@ -43,6 +44,8 @@ const showPlayground = cb => attach($groundDet, _show($ground, cb));
 window.addEventListener('load', () => {
     _cb(
         _delay([loadCSS, ['./css/app.css', './css/playground.css']]),
+        // eslint-disable-next-line no-global-assign
+        cb => (isWindowLoaded = true) && cb && cb(),
         _delay(hidePreloader, 1000),
         showApp,
         showAppIntro
