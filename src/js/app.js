@@ -1,4 +1,4 @@
-/* global transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show */
+/* global transTime, loadCSS, _cb, _delay, attach, show, hide, _detach, _show, _hide */
 
 const $pl = document.querySelector('#preloader');
 const $plBrand = document.querySelector('#preloader .brand-cont');
@@ -14,6 +14,9 @@ const $footerBrand = document.querySelector('#app-footer .brand-cont');
 const $footerBtns = [].slice.call(
     document.querySelectorAll('#app-footer .social-links a')
 );
+
+const $groundDet = document.querySelector('#playground-det');
+const $ground = document.querySelector('#playground');
 
 // const showPreloader = cb => attach($pl, _show($plBrand, _show($plLoader, cb)));
 const hidePreloader = cb => {
@@ -33,12 +36,17 @@ const showApp = cb => {
 };
 
 const showAppIntro = cb => attach($intro, _show($name, _show($playBtn, cb)));
+const hideAppIntro = cb => hide($playBtn, _hide($name, _detach($intro, cb)));
+
+const showPlayground = cb => attach($groundDet, _show($ground, cb));
 
 window.addEventListener('load', () => {
     _cb(
-        _delay([loadCSS, ['./css/app.css']]),
+        _delay([loadCSS, ['./css/app.css', './css/playground.css']]),
         _delay(hidePreloader, 1000),
         showApp,
         showAppIntro
     )();
 });
+
+$playBtn.addEventListener('click', _cb(hideAppIntro, showPlayground));
