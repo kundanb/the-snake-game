@@ -192,7 +192,7 @@ game.subreset = () => {
 
 game.reset = () => {
     game.subreset();
-    game.score = 0;
+    game.updateScore(0);
     snake.reset();
 };
 
@@ -238,8 +238,8 @@ game.stop = () => {
     }
 };
 
-game.updateScore = () => {
-    game.score++;
+game.updateScore = score => {
+    game.score = score ?? game.score + 1;
     $scoreBox.innerHTML = game.score;
 };
 
