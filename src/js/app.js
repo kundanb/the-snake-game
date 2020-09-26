@@ -21,8 +21,8 @@ const $ground = document.querySelector('#playground');
 
 // const showPreloader = cb => attach($pl, _show($plBrand, _show($plLoader, cb)));
 const hidePreloader = cb => {
-    hide($plBrand);
-    hide($plLoader, _detach($pl, cb));
+    hide($plLoader);
+    _delay(_hide($plBrand, _detach($pl, cb)), 1000)();
 };
 
 const showApp = cb => {
@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
         _delay([loadCSS, ['./css/app.css', './css/playground.css']]),
         // eslint-disable-next-line no-global-assign
         cb => (isWindowLoaded = true) && cb && cb(),
-        _delay(hidePreloader, 1000),
+        hidePreloader,
         showApp,
         showAppIntro
     )();
